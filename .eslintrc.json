@@ -20,6 +20,7 @@
         "whitelist": ["border-primary-\\/[0-9]+", "destructive", "text-md"]
       }
     ],
+    "tailwindcss/no-contradicting-classname": "off",
     "import/order": [
       "warn",
       {
