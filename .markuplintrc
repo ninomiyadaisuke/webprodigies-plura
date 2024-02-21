@@ -1,0 +1,22 @@
+{
+  "parser": {
+    "\\.jsx$": "@markuplint/jsx-parser"
+  },
+  "specs": {
+    "\\.jsx$": "@markuplint/react-spec"
+  },
+  "pretenders": [
+    {
+      "selector": "FaWpforms",
+      "as": "svg"
+    },
+    {
+      "selector": "LuView",
+      "as": "svg"
+    },
+    {
+      "selector": "HiCursorClick",
+      "as": "svg"
+    }
+  ]
+}
