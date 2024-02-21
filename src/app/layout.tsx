@@ -1,11 +1,12 @@
-import { Inter } from 'next/font/google';
+import { DM_Sans } from 'next/font/google';
+
+import { ThemeProvider } from '@/providers/theme-provider';
 
 import type { Metadata } from 'next';
 
 import './globals.css';
-import { ThemeProvider } from '@/providers/theme-provider';
 
-const inter = Inter({ subsets: ['latin'] });
+const font = DM_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Plura',
@@ -19,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={inter.className}>
+      <body className={font.className}>
         <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
           {children}
         </ThemeProvider>
