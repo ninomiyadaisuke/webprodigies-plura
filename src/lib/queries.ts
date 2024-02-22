@@ -1,11 +1,10 @@
 'use server';
 
 import { clerkClient, currentUser } from '@clerk/nextjs';
-import { User } from '@prisma/client';
+import { Agency, User } from '@prisma/client';
 import { redirect } from 'next/navigation';
 
 import { db } from './db';
-
 
 export const getAuthUserDetails = async () => {
   const user = await currentUser();
@@ -171,5 +170,102 @@ export const verifyAndAcceptInvitation = async () => {
       },
     });
     return agency ? agency.agencyId : null;
+  }
+};
+
+export const updateAgencyDetails = async (agencyId: string, agencyDetails: Partial<Agency>) => {
+  const response = await db.agency.update({
+    where: { id: agencyId },
+    data: {
+      ...agencyDetails,
+    },
+  });
+  return response;
+};
+
+export const deleteAgency = async (agencyId: string) => {
+  const response = await db.agency.delete({ where: { id: agencyId } });
+  return response;
+};
+
+export const initUser = async (newUser: Partial<User>) => {
+  const user = await currentUser();
+  if (!user) return;
+
+  const userData = await db.user.upsert({
+    where: {
+      email: user.emailAddresses[0]?.emailAddress,
+    },
+    update: newUser,
+    create: {
+      id: user.id,
+      avatarUrl: user.imageUrl,
+      email: user.emailAddresses[0]!.emailAddress,
+      name: `${user.firstName} ${user.lastName}`,
+      role: newUser.role || 'SUBACCOUNT_USER',
+    },
+  });
+
+  await clerkClient.users.updateUserMetadata(user.id, {
+    privateMetadata: {
+      role: newUser.role || 'SUBACCOUNT_USER',
+    },
+  });
+
+  return userData;
+};
+
+export const upsertAgency = async (agency: Agency) => {
+  if (!agency.companyEmail) return null;
+  try {
+    const agencyDetails = await db.agency.upsert({
+      where: {
+        id: agency.id,
+      },
+      update: agency,
+      create: {
+        users: {
+          connect: { email: agency.companyEmail },
+        },
+        ...agency,
+        SidebarOption: {
+          create: [
+            {
+              name: 'Dashboard',
+              icon: 'category',
+              link: `/agency/${agency.id}`,
+            },
+            {
+              name: 'Launchpad',
+              icon: 'clipboardIcon',
+              link: `/agency/${agency.id}/launchpad`,
+            },
+            {
+              name: 'Billing',
+              icon: 'payment',
+              link: `/agency/${agency.id}/billing`,
+            },
+            {
+              name: 'Settings',
+              icon: 'settings',
+              link: `/agency/${agency.id}/settings`,
+            },
+            {
+              name: 'Sub Accounts',
+              icon: 'person',
+              link: `/agency/${agency.id}/all-subaccounts`,
+            },
+            {
+              name: 'Team',
+              icon: 'shield',
+              link: `/agency/${agency.id}/team`,
+            },
+          ],
+        },
+      },
+    });
+    return agencyDetails;
+  } catch (error) {
+    throw new Error('Could not upsert agency');
   }
 };
