@@ -13,6 +13,7 @@ const Page = async ({ searchParams }: { searchParams: { plan: Plan; state: strin
 
   //get the users details
   const user = await getAuthUserDetails();
+
   if (agencyId) {
     if (user?.role === 'SUBACCOUNT_GUEST' || user?.role === 'SUBACCOUNT_USER') {
       return redirect('/subaccount');

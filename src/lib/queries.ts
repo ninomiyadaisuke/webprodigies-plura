@@ -1,8 +1,9 @@
 'use server';
 
 import { clerkClient, currentUser } from '@clerk/nextjs';
-import { Agency, User } from '@prisma/client';
+import { Agency, SubAccount, User } from '@prisma/client';
 import { redirect } from 'next/navigation';
+import { v4 } from 'uuid';
 
 import { db } from './db';
 
@@ -192,6 +193,8 @@ export const initUser = async (newUser: Partial<User>) => {
   const user = await currentUser();
   if (!user) return;
 
+  console.log('yahhooo!!!!');
+
   const userData = await db.user.upsert({
     where: {
       email: user.emailAddresses[0]?.emailAddress,
@@ -211,6 +214,7 @@ export const initUser = async (newUser: Partial<User>) => {
       role: newUser.role || 'SUBACCOUNT_USER',
     },
   });
+  console.log(userData);
 
   return userData;
 };
@@ -268,4 +272,110 @@ export const upsertAgency = async (agency: Agency) => {
   } catch (error) {
     throw new Error('Could not upsert agency');
   }
+};
+
+export const getNotificationAndUser = async (agencyId: string) => {
+  try {
+    const response = await db.notification.findMany({
+      where: {
+        agencyId,
+      },
+      include: {
+        User: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return response;
+  } catch (error) {
+    throw new Error('Could not get notification and user');
+  }
+};
+
+export const upsertSubAccount = async (subAccount: SubAccount) => {
+  if (!subAccount.companyEmail) return null;
+
+  const agencyOwner = await db.user.findFirst({
+    where: {
+      Agency: {
+        id: subAccount.agencyId,
+      },
+      role: 'AGENCY_OWNER',
+    },
+  });
+  if (!agencyOwner) throw new Error('🔴Erorr could not create subaccount');
+
+  const permissionId = v4();
+  const response = await db.subAccount.upsert({
+    where: {
+      id: subAccount.id,
+    },
+    update: subAccount,
+    create: {
+      ...subAccount,
+      Permissions: {
+        create: {
+          access: true,
+          email: agencyOwner.email,
+          id: permissionId,
+        },
+        connect: {
+          subAccountId: subAccount.id,
+          id: permissionId,
+        },
+      },
+      Pipeline: {
+        create: {
+          name: 'Lead Cycle',
+        },
+      },
+      SidebarOption: {
+        create: [
+          {
+            name: 'Launchpad',
+            icon: 'clipboardIcon',
+            link: `/subaccount/${subAccount.id}/launchpad`,
+          },
+          {
+            name: 'Settings',
+            icon: 'settings',
+            link: `/subaccount/${subAccount.id}/settings`,
+          },
+          {
+            name: 'Funnels',
+            icon: 'pipelines',
+            link: `/subaccount/${subAccount.id}/funnels`,
+          },
+          {
+            name: 'Media',
+            icon: 'database',
+            link: `/subaccount/${subAccount.id}/media`,
+          },
+          {
+            name: 'Automations',
+            icon: 'chip',
+            link: `/subaccount/${subAccount.id}/automations`,
+          },
+          {
+            name: 'Pipelines',
+            icon: 'flag',
+            link: `/subaccount/${subAccount.id}/pipelines`,
+          },
+          {
+            name: 'Contacts',
+            icon: 'person',
+            link: `/subaccount/${subAccount.id}/contacts`,
+          },
+          {
+            name: 'Dashboard',
+            icon: 'category',
+            link: `/subaccount/${subAccount.id}`,
+          },
+        ],
+      },
+    },
+  });
+
+  return response;
 };

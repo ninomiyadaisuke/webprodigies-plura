@@ -104,9 +104,9 @@ const AgencyDetails = ({ data }: Props) => {
         //   },
         // };
       }
-      await initUser({ role: 'AGENCY_OWNER' });
-      if (!data?.customerId) return;
 
+      await initUser({ role: 'AGENCY_OWNER' });
+      // if (!data?.customer0Id) return;
       const response = await upsertAgency({
         id: data?.id ? data.id : v4(),
         customerId: data?.customerId || '',
