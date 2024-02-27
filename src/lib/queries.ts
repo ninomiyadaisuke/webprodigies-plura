@@ -289,6 +289,8 @@ export const getNotificationAndUser = async (agencyId: string) => {
     });
     return response;
   } catch (error) {
+    console.log('test');
+
     throw new Error('Could not get notification and user');
   }
 };

@@ -1,11 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
+import BlurPage from '@/components/global/blur-page';
+import InfoBar from '@/components/global/infobar';
 import Sidebar from '@/components/sidebar';
 import Unauthorized from '@/components/unauthorized';
 
-import { verifyAndAcceptInvitation } from '@/lib/queries';
+import { getNotificationAndUser, verifyAndAcceptInvitation } from '@/lib/queries';
 
 type Props = {
   children: React.ReactNode;
@@ -29,20 +33,21 @@ const layout = async ({ children, params }: Props) => {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // let allNoti: any = [];
-  // const notifications = await getNotificationAndUser(agencyId);
+  let allNoti: any = [];
+  console.log('test', agencyId);
 
-  // if (notifications) allNoti = notifications;
+  const notifications = await getNotificationAndUser(agencyId);
+
+  if (notifications) allNoti = notifications;
 
   return (
     <div className="h-screen overflow-hidden">
       <Sidebar id={params.agencyId} type="agency" />
       <div className="md:pl-[300px]">
-        <div className="md:pl-[300px]">{children}</div>
-        {/* <InfoBar notifications={allNoti} role={allNoti.User?.role} /> */}
-        {/* <div className="relative">
+        <InfoBar notifications={allNoti} role={allNoti.User?.role} />
+        <div className="relative">
           <BlurPage>{children}</BlurPage>
-        </div> */}
+        </div>
       </div>
     </div>
   );
