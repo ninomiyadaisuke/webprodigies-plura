@@ -5,6 +5,9 @@ import { ThemeProvider } from '@/providers/theme-provider';
 import type { Metadata } from 'next';
 
 import './globals.css';
+import ModalProvider from '@/providers/modal-provider';
+
+import { Toaster } from '@/components/ui/toaster';
 
 const font = DM_Sans({ subsets: ['latin'] });
 
@@ -22,7 +25,10 @@ export default function RootLayout({
     <html lang="ja">
       <body className={font.className}>
         <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
-          {children}
+          <ModalProvider>
+            {children}
+            <Toaster />
+          </ModalProvider>
         </ThemeProvider>
       </body>
     </html>
