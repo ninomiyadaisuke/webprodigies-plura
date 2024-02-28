@@ -164,7 +164,7 @@ const MenuOptions = ({ details, sidebarLogo, sidebarOpt, subAccounts, user, defa
                   </CommandGroup>
                 </CommandList>
                 {(user?.role === 'AGENCY_OWNER' || user?.role === 'AGENCY_ADMIN') && (
-                  <SheetClose>
+                  <SheetClose asChild>
                     <Button
                       className="flex w-full gap-2"
                       onClick={() => {

@@ -12,6 +12,7 @@ export const getAuthUserDetails = async () => {
   if (!user) {
     return;
   }
+
   const userData = await db.user.findUnique({
     where: {
       email: user.emailAddresses[0]?.emailAddress,
@@ -431,4 +432,22 @@ export const changeUserPermissions = async (
   } catch (error) {
     throw new Error('Could not change persmission');
   }
+};
+
+export const getSubaccountDetails = async (subaccountId: string) => {
+  const response = await db.subAccount.findUnique({
+    where: {
+      id: subaccountId,
+    },
+  });
+  return response;
+};
+
+export const deleteSubAccount = async (subaccountId: string) => {
+  const response = await db.subAccount.delete({
+    where: {
+      id: subaccountId,
+    },
+  });
+  return response;
 };
