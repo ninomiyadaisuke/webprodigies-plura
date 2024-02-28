@@ -34,7 +34,6 @@ const layout = async ({ children, params }: Props) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let allNoti: any = [];
-  console.log('test', agencyId);
 
   const notifications = await getNotificationAndUser(agencyId);
 
