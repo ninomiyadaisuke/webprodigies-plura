@@ -1,7 +1,7 @@
 'use server';
 
 import { clerkClient, currentUser } from '@clerk/nextjs';
-import { Agency, SubAccount, User } from '@prisma/client';
+import { Agency, Role, SubAccount, User } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { v4 } from 'uuid';
 
@@ -449,5 +449,50 @@ export const deleteSubAccount = async (subaccountId: string) => {
       id: subaccountId,
     },
   });
+  return response;
+};
+
+export const deleteUser = async (userId: string) => {
+  await clerkClient.users.updateUserMetadata(userId, {
+    privateMetadata: {
+      role: undefined,
+    },
+  });
+  const deletedUser = await db.user.delete({
+    where: {
+      id: userId,
+    },
+  });
+  return deletedUser;
+};
+
+export const getUser = async (id: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  return user;
+};
+
+export const sendInvitation = async (role: Role, email: string, agencyId: string) => {
+  const response = await db.invitation.create({
+    data: { email, agencyId, role },
+  });
+
+  try {
+    await clerkClient.invitations.createInvitation({
+      emailAddress: email,
+      redirectUrl: process.env.NEXT_PUBLIC_URL,
+      publicMetadata: {
+        throughInvitation: true,
+        role,
+      },
+    });
+  } catch (error) {
+    throw new Error('Could not send invitation');
+  }
+
   return response;
 };
