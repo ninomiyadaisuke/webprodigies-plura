@@ -15,7 +15,7 @@ type Props = {
   searchParams: { code: string };
 };
 
-const LaunchPadPage = async ({ params, searchParams }: Props) => {
+const LaunchPadPage = async ({ params }: Props) => {
   const agencyDetails = await db.agency.findUnique({
     where: {
       id: params.agencyId,
@@ -23,8 +23,6 @@ const LaunchPadPage = async ({ params, searchParams }: Props) => {
   });
 
   if (!agencyDetails) return;
-
-  console.log(searchParams.code);
 
   const allDetailsExist =
     agencyDetails.address &&
