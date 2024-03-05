@@ -14,6 +14,11 @@
   "rules": {
     "unused-imports/no-unused-imports": "error",
     "react/jsx-sort-props": "error",
+    // "@typescript-eslint/no-floating-promises": [
+    //   "warn",
+    //   {
+    //     "ignoreIIFE": true
+    //   }]
     "tailwindcss/no-custom-classname": [
       "warn",
       {

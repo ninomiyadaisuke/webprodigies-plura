@@ -4,8 +4,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { Agency, User } from '@prisma/client';
+import { Agency, Contact, User } from '@prisma/client';
 import { createContext, useContext, useEffect, useState } from 'react';
+
+import { TicketDetails } from '@/lib/types';
 
 interface ModalProviderProps {
   children: React.ReactNode;
@@ -14,6 +16,8 @@ interface ModalProviderProps {
 export type ModalData = {
   user?: User;
   agency?: Agency;
+  ticket?: TicketDetails[0];
+  contact?: Contact;
 };
 
 type ModalContextType = {
