@@ -195,8 +195,6 @@ export const initUser = async (newUser: Partial<User>) => {
   const user = await currentUser();
   if (!user) return;
 
-  console.log('yahhooo!!!!');
-
   const userData = await db.user.upsert({
     where: {
       email: user.emailAddresses[0]?.emailAddress,
@@ -216,8 +214,6 @@ export const initUser = async (newUser: Partial<User>) => {
       role: newUser.role || 'SUBACCOUNT_USER',
     },
   });
-  console.log(userData);
-
   return userData;
 };
 
@@ -291,8 +287,6 @@ export const getNotificationAndUser = async (agencyId: string) => {
     });
     return response;
   } catch (error) {
-    console.log('test');
-
     throw new Error('Could not get notification and user');
   }
 };
