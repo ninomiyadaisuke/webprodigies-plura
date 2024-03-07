@@ -225,8 +225,6 @@ const TicketForm = ({ getNewTicket, laneId, subaccountId }: Props) => {
                       saveTimerRef.current = setTimeout(() => {
                         void (async () => {
                           const response = await searchContacts(event.target.value);
-                          console.log(response);
-
                           setContactList(response);
                           setSearch('');
                         })();
