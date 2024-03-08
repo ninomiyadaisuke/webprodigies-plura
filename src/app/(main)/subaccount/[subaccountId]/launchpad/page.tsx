@@ -8,12 +8,18 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { db } from '@/lib/db';
+import { stripe } from '@/lib/stripe';
+import { getStripeOAuthLink } from '@/lib/utils';
 
 type Props = {
   params: { subaccountId: string };
+  searchParams: {
+    state: string;
+    code: string;
+  };
 };
 
-const LaunchPad = async ({ params }: Props) => {
+const LaunchPad = async ({ params, searchParams }: Props) => {
   const subaccountDetails = await db.subAccount.findUnique({
     where: {
       id: params.subaccountId,
@@ -31,6 +37,28 @@ const LaunchPad = async ({ params }: Props) => {
     subaccountDetails.country &&
     subaccountDetails.name &&
     subaccountDetails.state;
+
+  const stripeOAuthLink = getStripeOAuthLink('subaccount', `launchpad___${subaccountDetails.id}`);
+
+  let connectedStripeAccount = false;
+
+  if (searchParams.code) {
+    if (!subaccountDetails.connectAccountId) {
+      try {
+        const response = await stripe.oauth.token({
+          grant_type: 'authorization_code',
+          code: searchParams.code,
+        });
+        await db.subAccount.update({
+          where: { id: params.subaccountId },
+          data: { connectAccountId: response.stripe_user_id },
+        });
+        connectedStripeAccount = true;
+      } catch (error) {
+        console.log('🔴 Could not connect stripe account', error);
+      }
+    }
+  }
 
   return (
     <BlurPage>
@@ -66,6 +94,13 @@ const LaunchPad = async ({ params }: Props) => {
                   />
                   <p>Connect your stripe account to accept payments. Stripe is used to run payouts.</p>
                 </div>
+                {subaccountDetails.connectAccountId || connectedStripeAccount ? (
+                  <CheckCircleIcon className=" shrink-0 p-2 text-primary" size={50} />
+                ) : (
+                  <Link className="rounded-md bg-primary px-4 py-2 text-white" href={stripeOAuthLink}>
+                    Start
+                  </Link>
+                )}
               </div>
               <div className="flex h-20 w-full items-center justify-between rounded-lg border p-4">
                 <div className="flex items-center gap-4">
