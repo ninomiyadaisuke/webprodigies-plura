@@ -12,8 +12,6 @@ export async function POST(req: Request) {
     });
 
   try {
-    console.log(req);
-
     const customer = await stripe.customers.create({
       email,
       name,

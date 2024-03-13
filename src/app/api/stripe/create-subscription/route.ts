@@ -36,6 +36,8 @@ export async function POST(req: Request) {
         expand: ['latest_invoice.payment_intent'],
       });
 
+      console.log('subscription yhoooooooooooo');
+
       return NextResponse.json({
         subscriptionId: subscription.id,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
