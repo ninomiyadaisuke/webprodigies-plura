@@ -15,6 +15,7 @@ const SubscriptionForm = ({ selectedPriceId }: Props) => {
   const elements = useElements();
   const stripeHook = useStripe();
   const [priceError, setPriceError] = useState('');
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     if (!selectedPriceId) {
       setPriceError('You need to select a plan to subscribe.');

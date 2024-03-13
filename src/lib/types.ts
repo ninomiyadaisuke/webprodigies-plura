@@ -3,7 +3,14 @@ import Stripe from 'stripe';
 import { z } from 'zod';
 
 import { db } from './db';
-import { getAuthUserDetails, getMedia, getPipelineDetails, getTicketsWithTags, getUserPermissions } from './queries';
+import {
+  getAuthUserDetails,
+  getFunnels,
+  getMedia,
+  getPipelineDetails,
+  getTicketsWithTags,
+  getUserPermissions,
+} from './queries';
 
 export type NotificationWithUser =
   | ({
@@ -106,3 +113,7 @@ export type StripeCustomerType = {
 };
 
 export type PricesList = Stripe.ApiList<Stripe.Price>;
+
+export type FunnelsForSubAccount = Prisma.PromiseReturnType<typeof getFunnels>[0];
+
+export type UpsertFunnelPage = Prisma.FunnelPageCreateWithoutFunnelInput;

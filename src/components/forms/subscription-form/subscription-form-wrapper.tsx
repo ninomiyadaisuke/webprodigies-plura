@@ -24,7 +24,6 @@ type Props = {
 const SubscriptionFormWrapper = ({ customerId, planExists }: Props) => {
   const { data, setClose } = useModal();
   const router = useRouter();
-  console.log(customerId);
 
   const [selectedPriceId, setSelectedPriceId] = useState<Plan | ''>(data.plans?.defaultPriceId || '');
 
@@ -75,7 +74,7 @@ const SubscriptionFormWrapper = ({ customerId, planExists }: Props) => {
       }
     };
     void createSecret();
-  }, [data, selectedPriceId, customerId]);
+  }, [data, selectedPriceId, customerId, planExists, setClose, router]);
 
   return (
     <div className="border-none transition-all">

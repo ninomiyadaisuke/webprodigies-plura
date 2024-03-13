@@ -38,13 +38,14 @@ export async function POST(req: NextRequest) {
   try {
     if (stripeWebhookEvents.has(stripeEvent.type)) {
       const subscription = stripeEvent.data.object as Stripe.Subscription;
+
       if (!subscription.metadata.connectAccountPayments && !subscription.metadata.connectAccountSubscriptions) {
         switch (stripeEvent.type) {
           case 'customer.subscription.created':
           case 'customer.subscription.updated': {
             if (subscription.status === 'active') {
               await subscriptionCreated(subscription, subscription.customer as string);
-              console.log('CREATED FROM WEBHOOK 💳', subscription);
+              console.log('CREATED FROM WEBHOOK 💳');
             } else {
               console.log('SKIPPED AT CREATED FROM WEBHOOK 💳 because subscription status is not active', subscription);
               break;
@@ -52,7 +53,7 @@ export async function POST(req: NextRequest) {
           }
           // eslint-disable-next-line no-fallthrough
           default:
-            console.log('👉🏻 Unhandled relevant event!', stripeEvent.type);
+            console.log('👉🏻 Unhandled relevant event!');
         }
       } else {
         console.log(
