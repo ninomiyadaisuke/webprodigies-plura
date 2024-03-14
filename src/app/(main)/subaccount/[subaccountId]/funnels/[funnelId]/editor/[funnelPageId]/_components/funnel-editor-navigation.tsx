@@ -5,13 +5,13 @@ import { ArrowLeftCircle, EyeIcon, Laptop, Redo2, Smartphone, Tablet, Undo2 } fr
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { FocusEventHandler, useEffect } from 'react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { toast } from '@/components/ui/use-toast';
 
 import { saveActivityLogsNotification, upsertFunnelPage } from '@/lib/queries';
 import { DeviceTypes, useEditor } from '@/providers/editor/editor-provider';
@@ -49,15 +49,13 @@ const FunnelEditorNavigation = ({ funnelId, funnelPageDetails, subaccountId }: P
         funnelId,
       );
 
-      toast({
-        title: 'Success',
-        description: 'Saved Editor',
+      toast('Success', {
+        description: 'Saved Funnel Page title',
       });
       router.refresh();
     } else {
-      toast({
-        title: 'Oppse',
-        description: 'Could not save editor',
+      toast('Oppse!', {
+        description: 'You need to have a title!',
       });
       event.target.value = funnelPageDetails.name;
     }
@@ -75,9 +73,6 @@ const FunnelEditorNavigation = ({ funnelId, funnelPageDetails, subaccountId }: P
   const handleRedo = () => {
     dispatch({ type: 'REDO' });
   };
-
-  console.log(state);
-
   const handleOnSave = async () => {
     const content = JSON.stringify(state.editor.elements);
 
@@ -96,13 +91,11 @@ const FunnelEditorNavigation = ({ funnelId, funnelPageDetails, subaccountId }: P
         description: `Updated a funnel page | ${response?.name}`,
         subaccountId: subaccountId,
       });
-      toast({
-        title: 'Success',
+      toast('Success', {
         description: 'Saved Editor',
       });
     } catch (error) {
-      toast({
-        title: 'Oppse',
+      toast('Oppse!', {
         description: 'Could not save editor',
       });
     }
