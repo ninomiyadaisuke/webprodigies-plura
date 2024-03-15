@@ -9,15 +9,16 @@ import { Tabs } from '@/components/ui/tabs';
 
 import { useEditor } from '@/providers/editor/editor-provider';
 
+import MediaBucketTab from './media-bucket-tab';
 import TabList from './tabs';
+import SettingsTab from './tabs/settings-tab';
 type Props = {
   subaccountId: string;
 };
 
 const FunnelEditorSidebar = ({ subaccountId }: Props) => {
-  console.log(subaccountId);
-
   const { state } = useEditor();
+
   return (
     <Sheet modal={false} open={true}>
       <Tabs className="w-full" defaultValue="Settings">
@@ -46,8 +47,11 @@ const FunnelEditorSidebar = ({ subaccountId }: Props) => {
                   Show your creativity! You can customize every component as you like.
                 </SheetDescription>
               </SheetHeader>
+              <SettingsTab />
             </TabsContent>
-            <TabsContent value="Media"></TabsContent>
+            <TabsContent value="Media">
+              <MediaBucketTab subaccountId={subaccountId} />
+            </TabsContent>
             <TabsContent value="Components">
               <SheetHeader className="p-6 text-left ">
                 <SheetTitle>Components</SheetTitle>

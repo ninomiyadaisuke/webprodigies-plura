@@ -131,38 +131,40 @@ const FunnelEditorNavigation = ({ funnelId, funnelPageDetails, subaccountId }: P
             }}
             value={state.editor.device}
           >
-            <TabsList className="grid h-fit w-full grid-cols-3 bg-transparent">
-              <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger className="size-10 p-0 data-[state=active]:bg-muted" value="Desktop">
-                    <Laptop />
+            <TooltipProvider>
+              <TabsList className="grid h-fit w-full grid-cols-3 bg-transparent">
+                <Tooltip>
+                  <TabsTrigger asChild className="size-10 p-0 data-[state=active]:bg-muted" value="Desktop">
+                    <TooltipTrigger>
+                      <Laptop />
+                    </TooltipTrigger>
                   </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Desktop</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger className="size-10 p-0 data-[state=active]:bg-muted" value="Tablet">
-                    <Tablet />
+                  <TooltipContent>
+                    <p>Desktop</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TabsTrigger asChild className="size-10 p-0 data-[state=active]:bg-muted" value="Tablet">
+                    <TooltipTrigger>
+                      <Tablet />
+                    </TooltipTrigger>
                   </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Tablet</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger>
-                  <TabsTrigger className="size-10 p-0 data-[state=active]:bg-muted" value="Mobile">
-                    <Smartphone />
+                  <TooltipContent>
+                    <p>Tablet</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TabsTrigger asChild className="size-10 p-0 data-[state=active]:bg-muted" value="Mobile">
+                    <TooltipTrigger>
+                      <Smartphone />
+                    </TooltipTrigger>
                   </TabsTrigger>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Mobile</p>
-                </TooltipContent>
-              </Tooltip>
-            </TabsList>
+                  <TooltipContent>
+                    <p>Mobile</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TabsList>
+            </TooltipProvider>
           </Tabs>
         </aside>
         <aside className="flex items-center gap-2">
