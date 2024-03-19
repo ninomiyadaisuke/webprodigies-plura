@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -46,7 +47,6 @@ const SettingsTab = () => {
     const styleObject = {
       [styleSettings]: value,
     };
-    console.log(styleObject);
 
     dispatch({
       type: 'UPDATE_ELEMENT',
@@ -61,6 +61,8 @@ const SettingsTab = () => {
       },
     });
   };
+
+  console.log(state.editor.selectedElement.styles.backgroundImage);
 
   const handleChangeCustomValues = (e: any) => {
     const settingProperty = e.target.id;
@@ -372,25 +374,22 @@ const SettingsTab = () => {
                 id="backgroundColor"
                 onChange={handleOnChanges}
                 placeholder="#HFI245"
-                value={state.editor.selectedElement.styles.backgroundColor}
+                value={state.editor.selectedElement.styles.backgroundColor || ''}
               />
             </div>
           </div>
           <div className="flex flex-col gap-2">
             <Label className="text-muted-foreground">Background Image</Label>
             <div className="flex text-clip rounded-md border-[1px]">
-              <div
-                className="w-12 "
-                style={{
-                  backgroundImage: state.editor.selectedElement.styles.backgroundImage,
-                }}
-              />
+              <div className="w-12">
+                <img alt="" className="h-full object-cover" src={state.editor.selectedElement.styles.backgroundImage} />
+              </div>
               <Input
                 className="mr-2 rounded-none !border-y-0 !border-r-0"
                 id="backgroundImage"
                 onChange={handleOnChanges}
                 placeholder="url()"
-                value={state.editor.selectedElement.styles.backgroundImage}
+                value={state.editor.selectedElement.styles.backgroundImage || ''}
               />
             </div>
           </div>
