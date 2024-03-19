@@ -11,7 +11,9 @@ import { useEditor } from '@/providers/editor/editor-provider';
 
 import MediaBucketTab from './media-bucket-tab';
 import TabList from './tabs';
+import ComponentsTab from './tabs/components-tab';
 import SettingsTab from './tabs/settings-tab';
+
 type Props = {
   subaccountId: string;
 };
@@ -57,7 +59,7 @@ const FunnelEditorSidebar = ({ subaccountId }: Props) => {
                 <SheetTitle>Components</SheetTitle>
                 <SheetDescription>You can drag and drop components on the canvas</SheetDescription>
               </SheetHeader>
-              {/* <ComponentsTab /> */}
+              <ComponentsTab />
             </TabsContent>
           </div>
         </SheetContent>

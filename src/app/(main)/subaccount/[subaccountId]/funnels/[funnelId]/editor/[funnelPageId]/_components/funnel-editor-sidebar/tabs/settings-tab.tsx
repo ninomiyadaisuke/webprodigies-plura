@@ -62,8 +62,6 @@ const SettingsTab = () => {
     });
   };
 
-  console.log(state.editor.selectedElement.styles.backgroundImage);
-
   const handleChangeCustomValues = (e: any) => {
     const settingProperty = e.target.id;
     const value = e.target.value;

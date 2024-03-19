@@ -103,7 +103,11 @@ const FunnelEditorNavigation = ({ funnelId, funnelPageDetails, subaccountId }: P
 
   return (
     <TooltipProvider>
-      <nav className={clsx('flex items-center justify-between gap-2 border-b-[1px] p-6 transition-all')}>
+      <nav
+        className={clsx('flex items-center justify-between gap-2 border-b-[1px] p-6 transition-all', {
+          '!h-0 !p-0 !overflow-hidden': state.editor.previewMode,
+        })}
+      >
         <aside className="flex w-[300px] max-w-[260px] items-center gap-4">
           <Link href={`/subaccount/${subaccountId}/funnels/${funnelId}`}>
             <ArrowLeftCircle />
