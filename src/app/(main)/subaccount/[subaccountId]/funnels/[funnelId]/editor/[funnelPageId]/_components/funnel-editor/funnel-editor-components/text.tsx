@@ -1,6 +1,8 @@
 import clsx from 'clsx';
-import { Badge, Trash } from 'lucide-react';
+import { Trash } from 'lucide-react';
 import React, { MouseEvent } from 'react';
+
+import { Badge } from '@/components/ui/badge';
 
 import { EditorElement, useEditor } from '@/providers/editor/editor-provider';
 
